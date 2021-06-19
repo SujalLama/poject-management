@@ -8,6 +8,11 @@ This is a project management system made using technologies: node, sequelize and
 ---
 ## To start this file
 - npm install
+- create .env fle
+
+    -Inside .env file
+        SECRET_KEY = #####
+
 - create config folder and db.js file inside
     
     -Paste this code
@@ -32,4 +37,4 @@ This is a project management system made using technologies: node, sequelize and
 - npm start
 
 ---
-####Thanks for using the app.
+#### Thanks for using the app.
