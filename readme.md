@@ -15,7 +15,6 @@ This is a project management system made using technologies: node, sequelize and
         host: process.env.HOST,
         dialect: 'postgres'
         });
-
         const connectDB = async () => {
             try {
         await sequelize.authenticate();
