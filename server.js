@@ -5,6 +5,7 @@ const userRouter = require('./routes/user')
 const authRouter = require('./routes/auth')
 const contactRouter = require('./routes/contact')
 const app = express();
+require('./auth/passport');
 //connecting database
 connectDB();
 

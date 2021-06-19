@@ -1,15 +1,15 @@
-const router = require('express').Router();
-const User = require('../models/user');
-const {Contact} = require('../models/index');
-// const db = require('../models/Con');
+const { getAllContacts, createContact, updateContact, deleteContact, getSingleContact } = require('../controllers/contact');
+const protect = require('../middleware/protect');
 
-router.get('/', async (req, res) => {
-    try {
-        const contacts = await Contact.findAll({include: User});
-        res.json({contacts});
-    } catch (error) {
-        res.json({error});
-    }
-})
+const router = require('express').Router();
+
+router.route('/')
+    .get(getAllContacts)
+    .post(protect, createContact);
+
+router.route('/:id')
+    .put(protect, updateContact)
+    .delete(protect, deleteContact)
+    .get(getSingleContact);
 
 module.exports = router

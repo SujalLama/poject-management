@@ -12,15 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      unique: true,
     }
   },
     {timestamps: true});
 
   Contact.associate = (models) => {
-    Contact.belongsTo(models.Contact, {
-      foreignKey: 'userId'
-    });
+    Contact.belongsTo(models.User);
   };
 
   return Contact;

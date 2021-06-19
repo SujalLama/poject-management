@@ -32,4 +32,4 @@ This is a project management system made using technologies: node, sequelize and
 - npm start
 
 ---
-[^1]Thanks for using the app.
+####Thanks for using the app.
