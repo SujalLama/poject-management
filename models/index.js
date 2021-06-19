@@ -21,6 +21,7 @@ const basename = path.basename(__filename)
 const db = {
   User: require('./user')(sequelize, Sequelize.DataTypes),
   Contact: require('./contact')(sequelize, Sequelize.DataTypes),
+  Project: require('./project')(sequelize, Sequelize.DataTypes),
 }
 
 Object.keys(db).forEach(modelName => {

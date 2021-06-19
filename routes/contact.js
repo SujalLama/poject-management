@@ -8,8 +8,9 @@ router.route('/')
     .post(protect, createContact);
 
 router.route('/:id')
+    .get(getSingleContact)
     .put(protect, updateContact)
-    .delete(protect, deleteContact)
-    .get(getSingleContact);
+    .delete(protect, deleteContact);
+    
 
 module.exports = router

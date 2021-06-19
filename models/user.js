@@ -53,6 +53,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasOne(models.Contact, {
       foreignKey: 'userId'
     });
+    User.hasMany(models.Project, {
+      foreignKey: 'userId'
+    })
   };
 
   return User;

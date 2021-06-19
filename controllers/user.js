@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
     try {
-       const user = await db.User.findByPK(req.params.id);
+       const user = await db.User.findByPk(req.params.id);
         res.json({user});
     } catch (error) {
         res.json({error});
