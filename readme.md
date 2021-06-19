@@ -9,7 +9,9 @@ This is a project management system made using technologies: node, sequelize and
 ## To start this file
 - npm install
 - create config folder and db.js file inside
+    
     -Paste this code
+
         `const Sequelize = require('sequelize');
         const sequelize = new Sequelize("db-name", "db-username", "db-password", {
         host: process.env.HOST,
