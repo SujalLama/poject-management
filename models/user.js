@@ -56,6 +56,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Project, {
       foreignKey: 'userId'
     })
+    User.belongsToMany(models.Team, {
+      through: 'members'
+    })
   };
 
   return User;

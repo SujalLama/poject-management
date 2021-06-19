@@ -22,7 +22,9 @@ const db = {
   User: require('./user')(sequelize, Sequelize.DataTypes),
   Contact: require('./contact')(sequelize, Sequelize.DataTypes),
   Project: require('./project')(sequelize, Sequelize.DataTypes),
-  Task: require('./task')(sequelize, Sequelize.DataTypes)
+  Task: require('./task')(sequelize, Sequelize.DataTypes),
+  Member: require('./members')(sequelize, Sequelize.DataTypes),
+  Team: require('./team')(sequelize, Sequelize.DataTypes),
 }
 
 Object.keys(db).forEach(modelName => {
