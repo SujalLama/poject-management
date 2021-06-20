@@ -4,18 +4,22 @@ This is a project management system made using technologies: node, sequelize and
     1. Login and register into system
     2. CRUD project
     3. CRUD tasks related to the project
+    4. Search functionalities
+    5. pagination
+    6. Filter by category (project)
+    7. Assign tasks to members and team
 
 ---
 ## To start this file
 - npm install
 - create .env fle
 
-    -Inside .env file
+    - Inside .env file
         SECRET_KEY = #####
 
 - create config folder and db.js file inside
     
-    -Paste this code
+    - Paste this code
 
         `const Sequelize = require('sequelize');
         const sequelize = new Sequelize("db-name", "db-username", "db-password", {
