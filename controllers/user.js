@@ -1,9 +1,29 @@
 const db = require("../models");
 
+const paginate = (pageSize, pageNumber) => {
+    const offset = (pageNumber - 1) * pageSize;
+    const limit = pageSize 
+    return {
+        offset,
+        limit
+    }
+}
 const getAllUsers = async (req, res) => {
     try {
-        const users = await db.User.findAll({include: db.Contact});
-        res.json({users});
+        const pageSize = 10;
+        const pageNumber = Number(req.query.pageNumber) || 1;
+        const users = await db.User.findAndCountAll({
+            include: db.Contact,
+            ...paginate(pageSize, pageNumber),
+            });
+            const totalPages = Math.ceil(users.count / pageSize)
+        res.json({
+            users: users.rows,
+            totalItems: users.count,
+            totalPages, 
+            pageNumber, 
+            pageSize
+        }).status(200);
     } catch (error) {
         res.json({error});
     }

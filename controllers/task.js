@@ -7,11 +7,34 @@ const checkProject = async (req, res) => {
     if(!project) return res.status(400).json({message: 'Project doesn\'t exists.' })
 }
 
+const paginate = (pageSize, pageNumber) => {
+    const offset = (pageNumber - 1) * pageSize;
+    const limit = pageSize 
+    return {
+        offset,
+        limit
+    }
+}
+
 const getAllTasks = async (req, res) => {
     try {
         checkProject(req, res);
-        const tasks = await db.Task.findAll({where: {projectId: req.params.id}});
-        res.json({tasks});
+         const pageSize = 10;
+        const pageNumber = Number(req.query.pageNumber) || 1;
+        const tasks = await db.Task.findAndCountAll({
+            where: {projectId: req.params.id},
+            ...paginate(pageSize, pageNumber),
+        });
+
+         const totalPages = Math.ceil(tasks.count / pageSize)
+
+        res.json({
+            tasks: tasks.rows,
+            totalItems: tasks.count,
+            totalPages, 
+            pageNumber, 
+            pageSize
+        });
     } catch (error) {
         res.json({error});
     }

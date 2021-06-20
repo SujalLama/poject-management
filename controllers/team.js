@@ -7,11 +7,34 @@ const db = require("../models");
 //     if(!project) return res.status(400).json({message: 'Project doesn\'t exists.' })
 // }
 
+const paginate = (pageSize, pageNumber) => {
+    const offset = (pageNumber - 1) * pageSize;
+    const limit = pageSize 
+    return {
+        offset,
+        limit
+    }
+}
+
 const getAllTeams = async (req, res) => {
     try {
         // checkProject(req, res);
-        const teams = await db.Team.findAll({include: [db.Project]});
-        res.json({teams});
+        const pageSize = 10;
+        const pageNumber = Number(req.query.pageNumber) || 1;
+        const teams = await db.Team.findAndCountAll({
+            include: [db.Project],
+            ...paginate(pageSize, pageNumber),
+        });
+         
+        const totalPages = Math.ceil(teams.count / pageSize);
+
+        res.json({
+            teams: teams.rows,
+            totalItems: teams.count,
+            totalPages, 
+            pageNumber, 
+            pageSize
+        });
     } catch (error) {
         res.json({error});
     }

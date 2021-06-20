@@ -1,9 +1,32 @@
 const db = require("../models");
 
+const paginate = (pageSize, pageNumber) => {
+    const offset = (pageNumber - 1) * pageSize;
+    const limit = pageSize 
+    return {
+        offset,
+        limit
+    }
+}
+
 const getAllProjects = async (req, res) => {
     try {
-        const projects = await db.Project.findAll({include: [db.Member, db.Team]});
-        res.json({projects});
+         const pageSize = 10;
+        const pageNumber = Number(req.query.pageNumber) || 1;
+        const projects = await db.Project.findAndCountAll({
+            include: [db.Member, db.Team],
+            ...paginate(pageSize, pageNumber),
+        });
+
+         const totalPages = Math.ceil(projects.count / pageSize)
+
+        res.json({
+            projects: projects.rows,
+            totalItems: projects.count,
+            totalPages, 
+            pageNumber, 
+            pageSize
+        });
     } catch (error) {
         res.json({error});
     }
