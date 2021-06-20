@@ -2,80 +2,76 @@ const { Op } = require("sequelize");
 const db = require("../models");
 
 //check community
-const checkProject = async (req, res) => {
-    const project = await db.Project.findByPk(req.params.id);
-    if(!project) return res.status(400).json({message: 'Project doesn\'t exists.' })
-}
+// const checkProject = async (req, res) => {
+//     const project = await db.Project.findByPk(req.params.id);
+//     if(!project) return res.status(400).json({message: 'Project doesn\'t exists.' })
+// }
 
-const getAllTasks = async (req, res) => {
+const getAllMembers = async (req, res) => {
     try {
-        checkProject(req, res);
-        const tasks = await db.Task.findAll({where: {projectId: req.params.id}});
-        res.json({tasks});
+        // checkProject(req, res);
+        const members = await db.Member.findAll();
+        res.json({members});
     } catch (error) {
         res.json({error});
     }
 }
 
-const getSingleTask = async (req, res) => {
+const getSingleMember = async (req, res) => {
     try {
-        checkProject(req, res);
-       const task = await db.Task.findOne({
-        where: {projectId: req.params.id, id: req.params.taskId}
-       });
+        // checkProject(req, res);
+       const member = await db.Member.findByPk(req.params.id);
 
-       if(!task) return res.status(400).json({message: 'Task doesn\'t exits.'})
-        res.json({task});
+       if(!member) return res.status(400).json({message: 'Member doesn\'t exits.'})
+        res.json({member});
     } catch (error) {
         res.json({error});
     }
 }
 
-const updateTask = async (req, res) => {
+const updateMember = async (req, res) => {
     try {
-        checkProject(req, res);
-        
-      const task = await db.Task.findOne({where: {projectId: req.params.id, id: req.params.taskId}});
+        // checkProject(req, res);
+        const {userId, projectId, teamId} = req.body;
+      const member = await db.Member.findOne({where: {id: req.params.id}});
 
-      if(!task) return res.status(400).json({message: 'task doesn\'t exists.'})
+      if(!member) return res.status(400).json({message: 'member doesn\'t exists.'})
 
-      await db.Task.update({...req.body}, {where: {id: req.params.taskId}});
-        res.json({message: 'task is successfully updated.'});
+      const oldmember = await db.Member.findOne({where: {userId, teamId, projectId}});
+        if(oldmember) return res.status(400).json({message: 'member already exists.'});
+
+      await db.Member.update({...req.body}, {where: {id: req.params.id}});
+        res.json({message: 'member is successfully updated.'});
 
     } catch (error) {
         res.json({error});
     }
 }
 
-const createTask = async (req, res) => {
+const createMember = async (req, res) => {
     try {
-        checkProject(req, res);
-        const oldTask = await db.Task.findOne({
-            where: {
-                task_name: {[Op.eq]: req.body.task_name},
-                projectId: req.params.id
-                }
-        })
-        if(oldTask) return res.status(400).json('Task already exists.');
-        const task = await db.Task.create({...req.body, projectId: req.params.id});
-        res.json({task});
+        const {userId, teamId, projectId} = req.body;
+        const oldmember = await db.Member.findOne({where: {userId, teamId, projectId}});
+        if(oldmember) return res.status(400).json({message: 'member already exists.'});
+        const member = await db.Member.create({...req.body});
+        res.json({member});
     } catch (error) {
         res.json({error: error.message});
     }
 }
 
-const deleteTask = async (req, res) => {
+const deleteMember = async (req, res) => {
     try {
-        checkProject(req, res);
-         const task = await db.Task.findOne({where: {projectId: req.params.id, id: req.params.taskId}});
-        if(!task) return res.status(400).json({message: 'task doesn\'t exists.'})
+        // checkProject(req, res);
+         const member = await db.Member.findByPk(req.params.id);
+        if(!member) return res.status(400).json({message: 'member doesn\'t exists.'})
        
-        await db.Task.destroy({where: {id: req.params.taskId, projectId: req.params.id}});
-        res.json({message: 'task is successfully deleted.'});
+        await db.Member.destroy({where: {id: req.params.id}});
+        res.json({message: 'member is successfully deleted.'});
 
     } catch (error) {
         res.json({error});
     }
 }
 
-module.exports = {createTask, getAllTasks, getSingleTask, deleteTask, updateTask};
+module.exports = {createMember, getAllMembers, getSingleMember, deleteMember, updateMember};

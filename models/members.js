@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Member = sequelize.define('teams', {
+  const Member = sequelize.define('members', {
      id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       teamId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER
   },
-    {timestamps: true});
+    {timestamps: false});
 
   Member.associate = (models) => {
     Member.belongsTo(models.Project);
