@@ -23,6 +23,33 @@ const searchProjectName = async (req, res) => {
     }
 }
 
+const getProjectByCategory = async (req, res) => {
+    try {
+        const categoryName = req.query.category;
+        const pageSize = 10;
+        const pageNumber = Number(req.query.pageNumber) || 1;
+
+        const projects = await db.Project.findAndCountAll({
+            where: {
+                category: categoryName
+            },
+            ...paginate(pageSize, pageNumber)
+        });
+
+        const totalPages = Math.ceil(projects.count / pageSize)
+
+        res.json({
+            projects: projects.rows,
+            totalItems: projects.count,
+            totalPages, 
+            pageNumber, 
+            pageSize
+        }).status(200);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const getAllProjects = async (req, res) => {
     try {
          const pageSize = 10;
@@ -94,4 +121,4 @@ const deleteProject = async (req, res) => {
     }
 }
 
-module.exports = {createProject, getAllProjects, getSingleProject, deleteProject, updateProject, searchProjectName};
+module.exports = {createProject, getAllProjects, getSingleProject, deleteProject, updateProject, searchProjectName, getProjectByCategory};

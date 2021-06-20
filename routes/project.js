@@ -1,5 +1,5 @@
 const { getAllProjects, updateProject, deleteProject, getSingleProject,
-     createProject, searchProjectName } = require('../controllers/project');
+     createProject, searchProjectName, getProjectByCategory } = require('../controllers/project');
 const protect = require('../middleware/protect');
 
 
@@ -10,6 +10,7 @@ router.route('/')
     .post(protect, createProject);
 
 router.route('/search').get(searchProjectName);
+router.route('/filter').get(getProjectByCategory);
 
 router.route('/:id')
     .get(getSingleProject)

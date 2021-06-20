@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
     },
     project_desc: DataTypes.TEXT,
+    category: {
+      type: DataTypes.ENUM('personal', 'business', 'production', 'marketing', 'finance')
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
