@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 
 const paginate = (pageSize, pageNumber) => {
@@ -8,6 +9,17 @@ const paginate = (pageSize, pageNumber) => {
         limit
     }
 }
+
+const searchUserName = async (req, res) => {
+    try {
+        const userName = req.query.name;
+        const users = await db.User.findAll({where: {name: {[Op.iLike]: '%' + userName + '%'}}});
+        res.json({users}).status(200);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const getAllUsers = async (req, res) => {
     try {
         const pageSize = 10;
@@ -76,4 +88,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {createUser, getAllUsers, getSingleUser, deleteUser, updateUser};
+module.exports = {createUser, getAllUsers, getSingleUser, deleteUser, updateUser, searchUserName};

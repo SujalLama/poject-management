@@ -1,4 +1,5 @@
 const db = require("../models");
+const {Op} = require('sequelize');
 
 const paginate = (pageSize, pageNumber) => {
     const offset = (pageNumber - 1) * pageSize;
@@ -6,6 +7,19 @@ const paginate = (pageSize, pageNumber) => {
     return {
         offset,
         limit
+    }
+}
+
+const searchProjectName = async (req, res) => {
+    try {
+        const projectName = req.query.name;
+        const projects = await db.Project.findAll({
+            where: {
+                project_name: {[Op.iLike]: '%' + projectName + '%'}
+            }});
+        res.json({projects}).status(200);
+    } catch (error) {
+        res.status(500).json(error);
     }
 }
 
@@ -80,4 +94,4 @@ const deleteProject = async (req, res) => {
     }
 }
 
-module.exports = {createProject, getAllProjects, getSingleProject, deleteProject, updateProject};
+module.exports = {createProject, getAllProjects, getSingleProject, deleteProject, updateProject, searchProjectName};

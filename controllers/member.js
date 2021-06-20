@@ -16,6 +16,24 @@ const paginate = (pageSize, pageNumber) => {
     }
 }
 
+const searchMemberName = async (req, res) => {
+    try {
+        const memberName = req.query.name;
+        const members = await db.Member.findAll({
+            include: [{
+                model: db.User,
+                // as: 'users',
+                where: {
+                    name: {[Op.iLike]: '%' + memberName + '%'}
+                },
+            }]    
+        });
+        res.json({members}).status(200);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const getAllMembers = async (req, res) => {
     try {
         // checkProject(req, res);
@@ -97,4 +115,4 @@ const deleteMember = async (req, res) => {
     }
 }
 
-module.exports = {createMember, getAllMembers, getSingleMember, deleteMember, updateMember};
+module.exports = {createMember, getAllMembers, getSingleMember, deleteMember, updateMember, searchMemberName};

@@ -1,4 +1,4 @@
-const { getAllTeams, createTeam, updateTeam, deleteTeam, getSingleTeam } = require('../controllers/team');
+const { getAllTeams, createTeam, updateTeam, deleteTeam, getSingleTeam, searchTeamName } = require('../controllers/team');
 const protect = require('../middleware/protect');
 
 const router = require('express').Router();
@@ -6,6 +6,9 @@ const router = require('express').Router();
 router.route('/')
     .get(getAllTeams)
     .post(protect, createTeam);
+
+router.route('/search')
+    .get(searchTeamName);
 
 router.route('/:id')
     .get(getSingleTeam)

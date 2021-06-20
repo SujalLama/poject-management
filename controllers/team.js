@@ -16,6 +16,16 @@ const paginate = (pageSize, pageNumber) => {
     }
 }
 
+const searchTeamName = async (req, res) => {
+    try {
+        const teamName = req.query.name;
+        const teams = await db.Team.findAll({where: {team_name: {[Op.iLike]: '%' + teamName + '%'}}});
+        res.json({teams}).status(200);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const getAllTeams = async (req, res) => {
     try {
         // checkProject(req, res);
@@ -25,7 +35,7 @@ const getAllTeams = async (req, res) => {
             include: [db.Project],
             ...paginate(pageSize, pageNumber),
         });
-         
+
         const totalPages = Math.ceil(teams.count / pageSize);
 
         res.json({
@@ -98,4 +108,6 @@ const deleteTeam = async (req, res) => {
     }
 }
 
-module.exports = {createTeam, getAllTeams, getSingleTeam, deleteTeam, updateTeam};
+module.exports = {createTeam, getAllTeams, 
+    getSingleTeam, deleteTeam, 
+    updateTeam, searchTeamName};

@@ -16,6 +16,22 @@ const paginate = (pageSize, pageNumber) => {
     }
 }
 
+const searchTaskName = async (req, res) => {
+    try {
+        const taskName = req.query.name;
+        const tasks = await db.Task.findAll({
+            where: 
+            {
+                task_name: {[Op.iLike]: '%' + taskName + '%'},
+                projectId: req.params.id
+            }
+        });
+        res.json({tasks}).status(200);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const getAllTasks = async (req, res) => {
     try {
         checkProject(req, res);
@@ -101,4 +117,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = {createTask, getAllTasks, getSingleTask, deleteTask, updateTask};
+module.exports = {createTask, getAllTasks, getSingleTask, deleteTask, updateTask, searchTaskName};
