@@ -10,7 +10,7 @@ const db = require("../models");
 const getAllTeams = async (req, res) => {
     try {
         // checkProject(req, res);
-        const teams = await db.Team.findAll();
+        const teams = await db.Team.findAll({include: [db.Project]});
         res.json({teams});
     } catch (error) {
         res.json({error});
