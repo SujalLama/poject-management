@@ -1,13 +1,14 @@
 # Project management api
 This is a project management system made using technologies: node, sequelize and postgres.
 #### Features
-    1. Login and register into system
-    2. CRUD project
-    3. CRUD tasks related to the project
-    4. Search functionalities
-    5. pagination
-    6. Filter by category (project)
-    7. Assign tasks to members and team
+    1. Login and register into system,
+    2. Upload profile pic
+    3. CRUD project
+    4. CRUD tasks related to the project
+    5. Search functionalities
+    6. pagination
+    7. Filter by category (project)
+    8. Assign tasks to members and team
 
 ---
 ## To start this file
