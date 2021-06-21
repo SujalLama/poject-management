@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     },
+    profile_path: DataTypes.STRING,
+    profile_file: DataTypes.JSON,
     password: {
       type: DataTypes.STRING,
       allowNull: false

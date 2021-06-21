@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const db = require("../models");
+const fs = require('fs')
 
 const paginate = (pageSize, pageNumber) => {
     const offset = (pageNumber - 1) * pageSize;
@@ -52,17 +53,27 @@ const getSingleUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { contact, name, email, password} = req.body;
-        const [newContact] = contact;
+         let filename = ''
+        if(req.file) {
+            filename = req.file.filename
+        }
 
-        const result = await sequelize.transaction(async (t) => {
-        const updatedUser =  await db.User.update({name, email, password}, 
-                    {where: {id: req.params.id}}, {transaction: t});
-            await Contact.update(newContact, {where: {userId: req.params.id}}, {transaction: t})
-            return updatedUser
-        })
+        const img = fs.readFileSync(req.file.path);
+        const encode_image = img.toString('base64');
 
-        res.json({message: 'user is successfully updated.', result});
+        const finalImg = {
+            contentType: req.file.mimetype,
+            image: Buffer.from(encode_image, 'base64')
+        };
+        console.log(finalImg);
+        
+        // if(!file) return res.status(400).json('Please upload a file');
+        const { name, email, password} = req.body;
+
+        if(password) return res.json({message: 'not allowed to update.'});
+        const user = await db.User.update({profile_path: filename, profile_file: finalImg}, 
+        {where: {id: req.params.id}})
+        res.json({message: 'user is successfully updated.', user});
 
     } catch (error) {
         res.json({error});
@@ -71,7 +82,11 @@ const updateUser = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const users = await db.User.create({...req.body}, {include: db.Contact});
+        let filename = ''
+        if(req.file) {
+            filename = req.file.filename
+        }
+        const users = await db.User.create({...req.body, profile_pic: 'uploads/' + filename}, {include: db.Contact});
         res.json({users});
     } catch (error) {
         res.json({error});

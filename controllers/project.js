@@ -86,7 +86,6 @@ const updateProject = async (req, res) => {
     try {
         const {project_name, project_desc} = req.body;
         
-        
       const project = await db.Project.findOne({where: {userId: req.user.id, id: req.params.id}});
 
       if(!project) return res.status(400).json({message: 'project doesn\'t exists.'})
@@ -101,6 +100,7 @@ const updateProject = async (req, res) => {
 
 const createProject = async (req, res) => {
     try {
+        r
         const project = await db.Project.create({...req.body, userId: req.user.id});
         res.json({project});
     } catch (error) {
